@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chooser — Let the camera pick</title>
+  <meta name="description" content="Get everyone in the live camera, watch the highlight hop between faces, and let Chooser pick one person at random. Camera processing stays on your device.">
+  <meta name="theme-color" content="#f8f8f5">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23daf866'/%3E%3Ccircle cx='20' cy='20' r='12' fill='none' stroke='%231d211b' stroke-width='3'/%3E%3Cpath d='M20 8v12l9 7M20 20l-10 7' fill='none' stroke='%231d211b' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="icon-defs" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14 4H9L7 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l7.8 4.5M12 12l-7.8 4.5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 5"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5zM16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14"/></symbol>
+  <symbol id="i-flip" viewBox="0 0 24 24"><path d="M20 8a9 9 0 0 0-15-3L2 8M2 3v5h5M4 16a9 9 0 0 0 15 3l3-3M22 21v-5h-5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 12 6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></symbol>
+</defs></svg>
+<div class="shell">
+  <header class="header">
+    <a class="brand" href="./" aria-label="Chooser home"><span class="brand-mark"><svg><use href="#i-spark"/></svg></span>chooser<span class="brand-period">.</span></a>
+    <div class="header-right"><span class="edition">THE CAMERA EDITION</span><button id="helpButton" class="text-button">How to play <span class="help-mark">?</span></button></div>
+  </header>
+  <main>
+    <section class="intro"><div><div class="eyebrow"><span class="mini-star">✳</span> A LITTLE CHANCE. A LOT OF FUN.</div><h1>Who’s the <span>lucky one?</span></h1><p>Get everyone in the live camera. Watch the spotlight choose.</p></div><div class="round-chip"><svg><use href="#i-camera"/></svg><span>One tap.<br>One chosen one.</span></div></section>
+    <div class="workspace">
+      <section class="camera-card" aria-label="Camera chooser">
+        <div class="panel-heading"><div class="panel-title"><svg><use href="#i-camera"/></svg>Your camera</div><span id="cameraStatus" class="status-pill">CAMERA OFF</span></div>
+        <div id="stage" class="camera-stage">
+          <video id="video" autoplay muted playsinline hidden></video>
+          <div id="faces" class="faces"></div>
+          <div class="frame-corner top-left"></div><div class="frame-corner top-right"></div><div class="frame-corner bottom-left"></div><div class="frame-corner bottom-right"></div>
+          <div id="cameraEmpty" class="camera-empty"><div class="camera-emblem"><svg><use href="#i-camera"/></svg><span class="emblem-spark">✦</span></div><h2>A little face time.</h2><p>Your next lucky pick starts here.<br>Turn on your camera to gather the group.</p><button id="startCamera" class="button button-lime"><svg><use href="#i-camera"/></svg>Enable camera</button><span class="permission-hint">We’ll ask for camera access first.</span></div>
+          <div id="stageLabel" class="stage-label" hidden>KEEP EVERYONE IN FRAME</div>
+          <div id="resultBadge" class="result-badge" hidden><svg><use href="#i-spark"/></svg><span></span></div>
+          <div id="selectionProgress" class="selection-progress" hidden aria-hidden="true"></div>
+        </div>
+        <div class="camera-toolbar"><div id="frameHint"><svg><use href="#i-people"/></svg><span>Room for everyone. Make sure we can see each face.</span></div><div class="camera-actions"><button id="flipCamera" class="icon-button" title="Switch camera" aria-label="Switch camera" disabled><svg><use href="#i-flip"/></svg></button><button id="stopCamera" class="small-button" disabled>Camera off</button></div></div>
+        <div id="message" class="message" role="status" hidden></div>
+        <div id="manualTools" class="manual-tools" hidden><span id="manualHint">Tap each face to add a fixed marker. Tap a marker to remove it.</span><button id="clearMarkers" class="text-button">Clear</button><button id="autoMode" class="text-button">Use auto-detect</button></div>
+        <div class="selection-controls">
+          <div class="selection-copy"><div id="selectionStatus" aria-live="polite">Your next lucky pick is a tap away.</div><span id="odds">Waiting for your people</span></div>
+          <div class="selection-buttons"><button id="nextRound" class="small-button" hidden>Clear result</button><button id="soundButton" class="sound-button" aria-label="Turn sound on" aria-pressed="false"><svg><use href="#i-sound"/></svg><span>Sound off</span></button><button id="chooseButton" class="button button-dark" disabled><svg><use href="#i-spark"/></svg><span>Choose someone</span></button></div>
+        </div>
+        <div class="participants"><div class="participants-title"><h3>In the frame <span id="personCount">0</span></h3><button id="manualMode" class="text-button" disabled>Mark faces manually</button></div><div id="peopleList" class="people-list"><span class="people-empty">Your people will appear here once the camera is on.</span></div></div>
+      </section>
+    </div>
+    <section class="quick-steps" aria-label="How it works"><div><span class="step-number">01</span><p><strong>Gather the gang</strong><span>Fit everyone into the live camera.</span></p></div><span class="step-divider"></span><div><span class="step-number">02</span><p><strong>Follow the spotlight</strong><span>The highlight hops from face to face.</span></p></div><span class="step-divider"></span><div><span class="step-number">03</span><p><strong>Meet your chosen one</strong><span>The winner stays highlighted live.</span></p></div></section>
+  </main>
+  <footer><span class="privacy"><svg><use href="#i-lock"/></svg>Your camera stays yours. No recording. No uploads.</span><span>Decisions, with a twist. <span class="footer-spark">✳</span></span></footer>
+</div>
+<dialog id="helpDialog"><button id="closeHelp" class="icon-button dialog-close" aria-label="Close instructions"><svg><use href="#i-close"/></svg></button><span class="eyebrow">EVERYONE’S INVITED</span><h2>Live faces. One lucky pick.</h2><ol><li>Enable your camera and get everyone in view. Numbered markers follow detected faces.</li><li>Tap “Choose someone.” The highlight hops between people directly on the live video, then lands on a random winner.</li><li>The camera keeps running and the winner stays highlighted. Tap “Choose again” for another round.</li></ol><p>Keep faces visible and avoid crossing during selection. If tracking loses someone, the round is cancelled. People who enter mid-round join the next one.</p><p>Manual markers are fixed spots on live video; they don’t follow movement.</p><button id="gotIt" class="button button-lime">Got it, let’s play</button></dialog>
+<script type="module" src="app.js"></script>
+</body></html>
